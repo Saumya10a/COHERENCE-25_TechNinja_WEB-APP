@@ -1,28 +1,23 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    const themeToggleBtn = document.getElementById("theme-toggle");
+    const body = document.body;
 
-    // Optional: Add subtle scroll animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
+    // Check Local Storage for Theme
+    if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark-mode");
+        themeToggleBtn.textContent = "☀️"; // Sun icon for Light mode
+    }
 
-    // Add animations to sections
-    document.querySelectorAll('.features, .how-it-works, .about').forEach(section => {
-        observer.observe(section);
+    themeToggleBtn.addEventListener("click", function () {
+        body.classList.toggle("dark-mode");
+
+        // Save Theme Preference
+        if (body.classList.contains("dark-mode")) {
+            localStorage.setItem("theme", "dark");
+            themeToggleBtn.textContent = "☀️"; // Change to Sun
+        } else {
+            localStorage.setItem("theme", "light");
+            themeToggleBtn.textContent = "🌙"; // Change to Moon
+        }
     });
 });
