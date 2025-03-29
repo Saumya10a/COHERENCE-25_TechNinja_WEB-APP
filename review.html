@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Page</title>
+    <link rel="stylesheet" href="review.css">
+</head>
+<body>
+
+    <div class="review-container">
+        <h2>Customer Reviews</h2>
+        <div class="reviews">
+            <div class="review">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"Great website! Very user-friendly and informative."</p>
+                <span>- Parth Raut</span>
+            </div>
+            <div class="review">
+                <div class="stars">⭐⭐⭐⭐</div>
+                <p>"Loved the interface, but there's room for improvement!"</p>
+                <span>- Rashid Khan</span>
+            </div>
+            <div class="review">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"Absolutely fantastic experience. Highly recommend!"</p>
+                <span>- Vaidehi </span>
+            </div>
+        </div>
+        
+        <h2>Leave a Review</h2>
+        <div class="review-form">
+            <div class="rating">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+            <textarea id="reviewText" placeholder="Write your review here..."></textarea>
+            <input type="text" id="reviewerName" placeholder="Your name">
+            <button onclick="submitReview()">Submit Review</button>
+        </div>
+    </div>
+
+    <script src="review.js"></script>
+</body>
+</html>
+<!-- Compare this snippet from home.css: -->
