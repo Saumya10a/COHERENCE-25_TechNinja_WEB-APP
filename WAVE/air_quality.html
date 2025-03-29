@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAVE - Air Quality Monitor</title>
+    <link rel="stylesheet" href="./styles/air_quality.css">
+    <style>
+        .air-quality-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #4b6cb7, #182848);
+            color: white;
+        }
+
+        .air-quality-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .air-quality-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .air-quality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .air-quality-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+
+        .air-quality-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .aqi-value {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .aqi-label {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .aqi-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .aqi-detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .aqi-status {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .aqi-good { background: rgba(0, 255, 0, 0.2); }
+        .aqi-moderate { background: rgba(255, 255, 0, 0.2); }
+        .aqi-unhealthy { background: rgba(255, 165, 0, 0.2); }
+        .aqi-very-unhealthy { background: rgba(255, 0, 0, 0.2); }
+        .aqi-hazardous { background: rgba(128, 0, 128, 0.2); }
+
+        .update-time {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .air-quality-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>WAVE</h1>
+            <span class="nav-tagline">Monitor. Predict. Transform</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="air-quality-container">
+        <div class="air-quality-header">
+            <h1>Air Quality Monitor</h1>
+            <p>Real-time air quality data for your location</p>
+        </div>
+
+        <div class="air-quality-grid">
+            <div class="air-quality-card">
+                <div class="aqi-label">Current AQI</div>
+                <div class="aqi-value" id="currentAQI">--</div>
+                <div class="aqi-status" id="aqiStatus">Loading...</div>
+                <div class="aqi-details">
+                    <div class="aqi-detail-item">
+                        <span>PM2.5:</span>
+                        <span id="pm25">-- µg/m³</span>
+                    </div>
+                    <div class="aqi-detail-item">
+                        <span>PM10:</span>
+                        <span id="pm10">-- µg/m³</span>
+                    </div>
+                    <div class="aqi-detail-item">
+                        <span>O3:</span>
+                        <span id="o3">-- µg/m³</span>
+                    </div>
+                    <div class="aqi-detail-item">
+                        <span>NO2:</span>
+                        <span id="no2">-- µg/m³</span>
+                    </div>
+                </div>
+                <div class="update-time" id="lastUpdate">Last updated: --</div>
+            </div>
+
+            <div class="air-quality-card">
+                <div class="aqi-label">24-Hour Forecast</div>
+                <div id="forecast" class="aqi-details">
+                    <div class="aqi-detail-item">
+                        <span>Tomorrow:</span>
+                        <span id="tomorrowAQI">--</span>
+                    </div>
+                    <div class="aqi-detail-item">
+                        <span>Trend:</span>
+                        <span id="trend">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Function to update AQI status and color
+        function updateAQIStatus(aqi) {
+            const statusElement = document.getElementById('aqiStatus');
+            statusElement.className = 'aqi-status';
+            
+            if (aqi <= 50) {
+                statusElement.textContent = 'Good';
+                statusElement.classList.add('aqi-good');
+            } else if (aqi <= 100) {
+                statusElement.textContent = 'Moderate';
+                statusElement.classList.add('aqi-moderate');
+            } else if (aqi <= 150) {
+                statusElement.textContent = 'Unhealthy for Sensitive Groups';
+                statusElement.classList.add('aqi-unhealthy');
+            } else if (aqi <= 200) {
+                statusElement.textContent = 'Unhealthy';
+                statusElement.classList.add('aqi-very-unhealthy');
+            } else {
+                statusElement.textContent = 'Hazardous';
+                statusElement.classList.add('aqi-hazardous');
+            }
+        }
+
+        // Function to update the display with new data
+        function updateDisplay(data) {
+            document.getElementById('currentAQI').textContent = data.aqi;
+            document.getElementById('pm25').textContent = `${data.pm25} µg/m³`;
+            document.getElementById('pm10').textContent = `${data.pm10} µg/m³`;
+            document.getElementById('o3').textContent = `${data.o3} µg/m³`;
+            document.getElementById('no2').textContent = `${data.no2} µg/m³`;
+            document.getElementById('lastUpdate').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+            
+            updateAQIStatus(data.aqi);
+        }
+
+        // Simulate real-time updates (replace with actual API calls)
+        function simulateData() {
+            const data = {
+                aqi: Math.floor(Math.random() * 300),
+                pm25: Math.floor(Math.random() * 50),
+                pm10: Math.floor(Math.random() * 100),
+                o3: Math.floor(Math.random() * 200),
+                no2: Math.floor(Math.random() * 100)
+            };
+            updateDisplay(data);
+        }
+
+        // Update every 5 seconds
+        setInterval(simulateData, 5000);
+        simulateData(); // Initial update
+    </script>
+</body>
+</html> 
