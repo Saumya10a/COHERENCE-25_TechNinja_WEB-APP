@@ -74,6 +74,8 @@ nav ul li a:hover {
     border-radius: 5px;
 }
 
+
+
 /* Hero Section */
 .hero {
     display: flex;
@@ -221,6 +223,86 @@ nav ul li a:hover {
     height: 300px;
 }
 
+
+/* Circular Chatbox */
+.chat-circle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.chat-circle:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+/* Chatbot Overlay */
+.chatbot-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    z-index: 2000;
+    overflow: hidden;
+}
+
+.chatbot-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.close-chatbot {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}   
+/* Chat Message (Speech Bubble) */
+.chat-message {
+    position: fixed;
+    bottom: 90px; /* Position above the chat circle */
+    right: 30px; /* Slightly offset from the chat circle */
+    background-color: white;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    z-index: 1000;
+    display: none; /* Initially hidden */
+}
+
+/* Show the message when hovering over the chat circle */
+.chat-circle:hover + .chat-message {
+    display: block;
+}   
 /* Footer */
 footer {
     background-color: var(--primary-color);
@@ -230,7 +312,7 @@ footer {
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
+    justify-content:space-around;
 }
 
 .footer-logo {
@@ -241,8 +323,8 @@ footer {
 
 .footer-logo img {
     margin-right: 10px;
-    height: 60px;
-    width: 60px;
+    height: 200px;
+    width: 200px;
 }
 
 .footer-links ul {
@@ -372,8 +454,10 @@ body {
 /* Traffic Light System */
 .traffic-light {
     display: flex;
-    justify-content: center;
-    margin: 10px 0;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    margin: 10px auto; /* Adds margin and centers the container */
+    width: fit-content; /* Ensures the container wraps tightly around its content */
 }
 .light {
     width: 40px; /* Bigger lights */
@@ -425,6 +509,32 @@ body {
 }
 
 /* From Uiverse.io by asgardOP */ 
+.loader-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align items to the right */
+    gap: 20px; /* Space between loader and buttons */
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.text-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: auto; /* Shift buttons to the left */
+}
+
+.text-button:hover {
+    background-color: var(--secondary-color);
+}
+
 .loader {
     width: fit-content;
     height: fit-content;
@@ -432,12 +542,13 @@ body {
     border-radius: 7px;
     padding: 10px;
     display: flex;
-    align-items: center;
+    align-items: center; /* Fixed alignment */
     justify-content: center;
-    position: relative;
+    position: relative; /* Keep the loader in its position */
     cursor: pointer;
     transition: 0.2s;
-  }
+}
+
   
   .loader:hover {
     background-color: rgb(26, 26, 26);
@@ -487,6 +598,8 @@ body {
       width: 30px;
       height: 30px;
     }
+
+    
   }
   
 /* AQI Card Styles */
@@ -646,4 +759,3 @@ body {
         font-size: 1rem;
     }
 }
-  
