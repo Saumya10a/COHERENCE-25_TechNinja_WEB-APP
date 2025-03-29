@@ -1,0 +1,252 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #223054, #3a66df, #14047a);
+    color: white;
+}
+
+.navbar {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.nav-brand h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+}
+
+.nav-tagline {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 2rem;
+    transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.nav-toggle span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 2px 0;
+    transition: 0.3s;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    padding: 0 20px;
+}
+
+.search-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.search-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-box button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    background: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-box button:hover {
+    background: #45a049;
+}
+
+.air-quality-display {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.main-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.location-info h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.location-info p {
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.aqi-display {
+    margin: 20px 0;
+}
+
+.aqi-value {
+    font-size: 4rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.aqi-label {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.aqi-status {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+.aqi-status.good { background: rgba(76, 175, 80, 0.2); }
+.aqi-status.moderate { background: rgba(255, 235, 59, 0.2); }
+.aqi-status.unhealthy-sg { background: rgba(255, 152, 0, 0.2); }
+.aqi-status.unhealthy { background: rgba(244, 67, 54, 0.2); }
+.aqi-status.very-unhealthy { background: rgba(156, 39, 176, 0.2); }
+.aqi-status.hazardous { background: rgba(103, 58, 183, 0.2); }
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.detail-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.detail-card:hover {
+    transform: translateY(-5px);
+}
+
+.detail-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.detail-label {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.update-info {
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        margin: 10px 0;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .search-section h1 {
+        font-size: 2rem;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+} 

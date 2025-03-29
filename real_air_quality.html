@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAVE - Real-Time Air Quality</title>
+    <link rel="stylesheet" href="real_air_quality.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>WAVE</h1>
+            <span class="nav-tagline">Monitor. Predict. Transform</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="search-section">
+            <h1>Air Quality Monitor</h1>
+            <div class="search-box">
+                <input type="text" id="cityInput" placeholder="Enter city name">
+                <button onclick="getAirQuality()">Search</button>
+            </div>
+        </div>
+
+        <div class="air-quality-display">
+            <div class="main-card">
+                <div class="location-info">
+                    <h2 id="cityName">Enter a city name</h2>
+                    <p id="stationName"></p>
+                </div>
+                <div class="aqi-display">
+                    <div class="aqi-value" id="aqiValue">--</div>
+                    <div class="aqi-label">AQI</div>
+                </div>
+                <div class="aqi-status" id="aqiStatus">Search for air quality data</div>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-icon">🌫️</div>
+                    <div class="detail-label">PM2.5</div>
+                    <div class="detail-value" id="pm25">-- µg/m³</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">🌪️</div>
+                    <div class="detail-label">PM10</div>
+                    <div class="detail-value" id="pm10">-- µg/m³</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">☁️</div>
+                    <div class="detail-label">O3</div>
+                    <div class="detail-value" id="o3">-- µg/m³</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">🚗</div>
+                    <div class="detail-label">NO2</div>
+                    <div class="detail-value" id="no2">-- µg/m³</div>
+                </div>
+            </div>
+
+            <div class="update-info">
+                <p>Last Updated: <span id="lastUpdate">--</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your actual OpenWeather API key
+        const API_KEY = "bdff7758901454362d3461df2cd6cd1c"; // Replace with your actual key
+        const API_URL = "https://api.openweathermap.org/data/2.5/";
+
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        async function getAirQuality() {
+            const cityInput = document.getElementById('cityInput').value;
+            if (!cityInput) {
+                alert('Please enter a city name');
+                return;
+            }
+
+            try {
+                // First get coordinates for the city
+                const geoResponse = await fetch(`${API_URL}weather?q=${cityInput}&appid=${API_KEY}`);
+                const geoData = await geoResponse.json();
+
+                if (geoData.cod === '404') {
+                    alert('City not found');
+                    return;
+                }
+
+                const lat = geoData.coord.lat;
+                const lon = geoData.coord.lon;
+
+                // Then get air quality data using coordinates
+                const aqiResponse = await fetch(`${API_URL}air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
+                const aqiData = await aqiResponse.json();
+
+                // Combine the data
+                const combinedData = {
+                    city: geoData.name,
+                    location: `${geoData.sys.country}`,
+                    aqi: aqiData.list[0].main.aqi * 20, // Convert to AQI scale
+                    measurements: [
+                        {
+                            parameter: 'pm25',
+                            value: aqiData.list[0].components.pm2_5,
+                            unit: 'µg/m³'
+                        },
+                        {
+                            parameter: 'pm10',
+                            value: aqiData.list[0].components.pm10,
+                            unit: 'µg/m³'
+                        },
+                        {
+                            parameter: 'o3',
+                            value: aqiData.list[0].components.o3,
+                            unit: 'µg/m³'
+                        },
+                        {
+                            parameter: 'no2',
+                            value: aqiData.list[0].components.no2,
+                            unit: 'µg/m³'
+                        }
+                    ],
+                    lastUpdated: new Date(aqiData.list[0].dt * 1000).toISOString()
+                };
+
+                updateDisplay(combinedData);
+            } catch (error) {
+                console.error('Error fetching air quality data:', error);
+                alert('Error fetching air quality data');
+            }
+        }
+
+        function updateDisplay(data) {
+            // Update city and station info
+            document.getElementById('cityName').textContent = data.city;
+            document.getElementById('stationName').textContent = data.location;
+
+            // Update AQI
+            document.getElementById('aqiValue').textContent = Math.round(data.aqi);
+            updateAQIStatus(data.aqi);
+
+            // Update pollutant values
+            data.measurements.forEach(measurement => {
+                const element = document.getElementById(measurement.parameter.toLowerCase());
+                if (element) {
+                    element.textContent = `${Math.round(measurement.value)} ${measurement.unit}`;
+                }
+            });
+
+            // Update timestamp
+            const updateTime = new Date(data.lastUpdated).toLocaleString();
+            document.getElementById('lastUpdate').textContent = updateTime;
+        }
+
+        function updateAQIStatus(aqi) {
+            const statusElement = document.getElementById('aqiStatus');
+            statusElement.className = 'aqi-status';
+
+            if (aqi <= 50) {
+                statusElement.textContent = 'Good';
+                statusElement.classList.add('good');
+            } else if (aqi <= 100) {
+                statusElement.textContent = 'Moderate';
+                statusElement.classList.add('moderate');
+            } else if (aqi <= 150) {
+                statusElement.textContent = 'Unhealthy for Sensitive Groups';
+                statusElement.classList.add('unhealthy-sg');
+            } else if (aqi <= 200) {
+                statusElement.textContent = 'Unhealthy';
+                statusElement.classList.add('unhealthy');
+            } else if (aqi <= 300) {
+                statusElement.textContent = 'Very Unhealthy';
+                statusElement.classList.add('very-unhealthy');
+            } else {
+                statusElement.textContent = 'Hazardous';
+                statusElement.classList.add('hazardous');
+            }
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('cityInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                getAirQuality();
+            }
+        });
+    </script>
+</body>
+</html> 
