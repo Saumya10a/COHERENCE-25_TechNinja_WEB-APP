@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.A.V.E - Water Levels</title>
+    <link rel="stylesheet" href="./styles/waterlevel.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <img src="logo.jpeg">
+            <span>W.A.V.E</span>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="home.html#features">Features</a></li>
+                <li><a href="home.html#about">About</a></li>
+                <li><a href="home.html">Home</a></li>
+                <li class="login-btn"><a href="login s.html">Login</a></li>
+                <li>
+                    <button id="theme-toggle" class="theme-btn">🌙</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1>Water Level Monitoring</h1>
+            <p>Real-time data on water levels across India</p>
+        </section>
+
+        <section class="data-overview">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Monitored Locations</h3>
+                    <p id="monitored-locations">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Water Level</h3>
+                    <p id="avg-level">0.00 m</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Critical Alerts</h3>
+                    <p id="critical-alerts">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Last Updated</h3>
+                    <p id="last-updated">-</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="add-location-section">
+            <div class="add-location-container">
+                <h2>Monitor New Location</h2>
+                <p>Enter a city or region to monitor its water levels</p>
+                <div class="location-input-group">
+                    <input type="text" id="location-input" placeholder="Enter location (e.g., Mumbai, Delhi, Bangalore)">
+                    <button id="add-location-btn" class="btn btn-primary">Add Location</button>
+                </div>
+                <div class="location-suggestions">
+                    <p>Suggested locations: Mumbai, Delhi, Bangalore, Chennai, Kolkata, Hyderabad, Pune, Ahmedabad, Jaipur</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="data-details">
+            <div class="controls-container">
+                <h2>Water Level Data</h2>
+                <button id="refresh-btn" class="btn btn-primary">Refresh Data</button>
+            </div>
+
+            <div id="loading-indicator" class="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Loading water level data...</p>
+            </div>
+
+            <div id="error-message" class="error-message" style="display: none;">
+                <p>Please add a location to monitor water levels.</p>
+            </div>
+
+            <div class="water-levels-container">
+                <table id="water-levels-table">
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>Water Body</th>
+                            <th>Current Level (m)</th>
+                            <th>Normal Level (m)</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="water-levels-data">
+                        <!-- Data will be inserted here via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="visualization">
+            <h2>Water Level Visualization</h2>
+            <div class="chart-container">
+                <canvas id="water-level-chart"></canvas>
+            </div>
+        </section>
+
+        <section class="real-time-note">
+            <div class="note-container">
+                <h3>Real-Time Monitoring</h3>
+                <p>This dashboard automatically refreshes every 30 seconds to provide you with the latest water level data.</p>
+                <p>Last refresh: <span id="last-refreshed"></span></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="logo.jpeg">
+                <span>W.A.V.E</span>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="login s.html">Login</a></li>
+                    <li><a href="register.html">Sign Up</a></li>
+                    <li><a href="home.html#features">Features</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: saumya.232643108@vcet.edu.in</p>
+                <p>Phone: 9167636848</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 W.A.V.E. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./scripts/waterlevel.js"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+// Global variables
+let map;
+let directionsService;
+let directionsRenderer;
+let trafficLayer;
+let markers = [];
+let currentMode = 'DRIVING';
+let autocompleteStart;
+let autocompleteEnd;
+
+// Initialize the map
+function initMap() {
+    // Hide loading overlay
+    document.getElementById('loading-overlay').style.display = 'none';
+    
+    // Create map centered on a default location (can be adjusted)
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 40.7128, lng: -74.0060 }, // New York City
+        zoom: 12,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        fullscreenControl: true,
+        streetViewControl: true,
+        zoomControl: true
+    });
+    
+    // Initialize directions service and renderer
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+        map: map,
+        suppressMarkers: false,
+        polylineOptions: {
+            strokeColor: '#2196F3',
+            strokeWeight: 5
+        }
+    });
+    
+    // Initialize traffic layer and add to map
+    trafficLayer = new google.maps.TrafficLayer();
+    trafficLayer.setMap(map);
+    
+    // Initialize autocomplete for input fields
+    autocompleteStart = new google.maps.places.Autocomplete(
+        document.getElementById('start'),
+        { types: ['geocode'] }
+    );
+    
+    autocompleteEnd = new google.maps.places.Autocomplete(
+        document.getElementById('end'),
+        { types: ['geocode'] }
+    );
+    
+    // Add event listeners
+    setupEventListeners();
+    
+    // Try to get user's current location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                
+                map.setCenter(pos);
+                
+                // Add marker for current location
+                const marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: 'Your Location',
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: '#4285F4',
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 2
+                    }
+                });
+                
+                markers.push(marker);
+                
+                // Try to get address for current location
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ location: pos }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        document.getElementById('start').value = results[0].formatted_address;
+                    }
+                });
+            },
+            () => {
+                console.log('Error: The Geolocation service failed.');
+            }
+        );
+    }
+}
+
+// Set up event listeners
+function setupEventListeners() {
+    // Toggle traffic layer
+    document.getElementById('toggle-traffic').addEventListener('click', function() {
+        this.classList.toggle('active');
+        if (this.classList.contains('active')) {
+            trafficLayer.setMap(map);
+            this.textContent = 'Show Traffic';
+        } else {
+            trafficLayer.setMap(null);
+            this.textContent = 'Hide Traffic';
+        }
+    });
+    
+    // Toggle sidebar
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('hidden');
+        
+        if (sidebar.classList.contains('hidden')) {
+            this.textContent = 'Show Sidebar';
+        } else {
+            this.textContent = 'Hide Sidebar';
+        }
+        
+        // Trigger resize event to make sure map fills available space
+        google.maps.event.trigger(map, 'resize');
+    });
+    
+    // Transport mode selection
+    const transportButtons = document.querySelectorAll('.transport-button');
+    transportButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            transportButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            currentMode = this.getAttribute('data-mode');
+        });
+    });
+    
+    // Calculate route button
+    document.getElementById('calculate-route').addEventListener('click', calculateRoute);
+}
+
+// Calculate and display route
+function calculateRoute() {
+    const start = document.getElementById('start').value;
+    const end = document.getElementById('end').value;
+    
+    if (start === '' || end === '') {
+        alert('Please enter both starting point and destination.');
+        return;
+    }
+    
+    // Clear existing markers
+    clearMarkers();
+    
+    // Set up request for directions
+    const request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode[currentMode],
+        provideRouteAlternatives: true
+    };
+    
+    // If transit mode is selected, add transit options
+    if (currentMode === 'TRANSIT') {
+        request.transitOptions = {
+            departureTime: new Date(),
+            modes: [google.maps.TransitMode.BUS, google.maps.TransitMode.RAIL, google.maps.TransitMode.SUBWAY, google.maps.TransitMode.TRAIN],
+            routingPreference: google.maps.TransitRoutePreference.FEWER_TRANSFERS
+        };
+    }
+    
+    // Get directions
+    directionsService.route(request, (result, status) => {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(result);
+            displayRouteDetails(result);
+        } else {
+            alert('Directions request failed due to ' + status);
+        }
+    });
+}
+
+// Display route details in sidebar
+function displayRouteDetails(result) {
+    const route = result.routes[0];
+    const leg = route.legs[0];
+    
+    // Display summary information
+    let summaryHTML = `
+        <div class="route-info">
+            <span class="route-info-label">Distance:</span>
+            <span>${leg.distance.text}</span>
+        </div>
+        <div class="route-info">
+            <span class="route-info-label">Duration:</span>
+            <span>${leg.duration.text}</span>
+        </div>
+        <div class="route-info">
+            <span class="route-info-label">From:</span>
+            <span>${leg.start_address}</span>
+        </div>
+        <div class="route-info">
+            <span class="route-info-label">To:</span>
+            <span>${leg.end_address}</span>
+        </div>
+    `;
+    
+    // Add traffic duration if available
+    if (leg.duration_in_traffic) {
+        summaryHTML += `
+            <div class="route-info">
+                <span class="route-info-label">Duration in traffic:</span>
+                <span>${leg.duration_in_traffic.text}</span>
+            </div>
+        `;
+    }
+    
+    document.getElementById('route-summary').innerHTML = summaryHTML;
+    
+    // Display step-by-step directions
+    let stepsHTML = '';
+    leg.steps.forEach((step, index) => {
+        // Create temporary element to decode HTML entities in instructions
+        const temp = document.createElement('div');
+        temp.innerHTML = step.instructions;
+        const instructions = temp.textContent || temp.innerText;
+        
+        stepsHTML += `
+            <div class="route-step">
+                <p><strong>Step ${index + 1}:</strong> ${instructions}</p>
+                <p class="step-distance">${step.distance.text} - ${step.duration.text}</p>
+            </div>
+        `;
+    });
+    
+    document.getElementById('route-steps').innerHTML = stepsHTML;
+}
+
+// Clear all markers from the map
+function clearMarkers() {
+    markers.forEach(marker => {
+        marker.setMap(null);
+    });
+    markers = [];
+}
+
+// Handle errors that might occur during map initialization
+function handleMapError() {
+    document.getElementById('loading-overlay').innerHTML = `
+        <div class="error-message">
+            <h3>Error Loading Map</h3>
+            <p>There was a problem loading the Google Maps API. Please check your API key and try again.</p>
+        </div>
+    `;
+}
+
+// Add error handler for Google Maps API
+window.gm_authFailure = handleMapError;

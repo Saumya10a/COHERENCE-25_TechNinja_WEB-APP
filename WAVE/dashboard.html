@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./styles/dashboard.css">
+</head>
+<body>
+
+        <div class="logo">
+            <img src="wave.png" alt="WAVE">
+            <span>W.A.V.E</span>
+        </div>
+        <nav>
+            <ul>
+             <!-- From Uiverse.io by eslam-hany --> 
+<div class="button-container">
+    <a href="home.html" class="button">
+      <svg
+        class="icon"
+        stroke="currentColor"
+        fill="currentColor"
+        stroke-width="0"
+        viewBox="0 0 1024 1024"
+        height="1em"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"
+        ></path>
+      </svg>
+    </a>
+    <a href="traffic.html" class="button">
+      <svg
+      class="icon"
+      stroke="currentColor"
+      fill="none"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      height="1em"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <!-- Traffic Light Body (Thicker Stroke) -->
+      <rect x="9" y="3" width="6" height="18" rx="2" stroke-width="1.5"></rect>
+    
+      <!-- Traffic Lights (Thinner Stroke) -->
+      <circle cx="12" cy="6" r="2" stroke-width="1"></circle>  <!-- Red Light -->
+      <circle cx="12" cy="12" r="2" stroke-width="1"></circle> <!-- Yellow Light -->
+      <circle cx="12" cy="18" r="2" stroke-width="1"></circle> <!-- Green Light -->
+    
+      <!-- Poles (Thinner Details) -->
+      <path d="M9 3h6" stroke-width="1"></path>  <!-- Top Bar -->
+      <path d="M12 21v2" stroke-width="1"></path> <!-- Bottom Pole -->
+    </svg>
+    
+    </a>
+    <a href="air_quality.html" class="button">
+      <svg
+  class="icon"
+  stroke="currentColor"
+  fill="none"
+  stroke-width="2"
+  viewBox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  height="1em"
+  width="1em"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle cx="12" cy="6" r="4"></circle>
+  <path d="M4 12h16M4 16h16M7 20h10"></path>
+</svg>
+
+    </a>
+  
+    <a href="profile.html" class="button">
+      <svg
+  class="icon"
+  stroke="currentColor"
+  fill="none"
+  stroke-width="2"
+  viewBox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  height="1em"
+  width="1em"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle cx="12" cy="7" r="5"></circle>
+  <path d="M3 21a9 9 0 1 1 18 0"></path>
+</svg>
+
+    </a>
+  </div>
+  
+            </ul>
+        </nav>
+    </header>
+    <!-- From Uiverse.io by asgardOP --> 
+<div class="loader">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    height="24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    class="w-6 h-6 text-gray-800 dark:text-white"
+  >
+    <path
+      d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z"
+      stroke-width="2"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+      stroke="currentColor"
+    ></path>
+  </svg>
+  <div class="point"></div>
+</div>
+
+
+    <main>
+        
+
+        <!-- Clock Section -->
+        <section id="clock" class="features">
+
+          
+            </div>
+        </section>
+
+        <h1>Smart City Dashboard</h1>
+
+        <div class="dashboard-container">
+    
+            <!-- Real-Time Weather Card -->
+            <div class="card aqi-card">
+                <div class="card-header">
+                    <h2>Air Quality Index</h2>
+                    <div class="last-update">Last updated: <span id="lastUpdate">Just now</span></div>
+                </div>
+                <div class="aqi-display">
+                    <div class="aqi-value" id="aqiValue">--</div>
+                    <div class="aqi-status" id="aqiStatus">Loading...</div>
+                </div>
+                <div class="aqi-details">
+                    <div class="pollutant">
+                        <span class="label">PM2.5</span>
+                        <div class="value-container">
+                            <span class="value" id="pm25">--</span>
+                            <span class="unit">µg/m³</span>
+                        </div>
+                    </div>
+                    <div class="pollutant">
+                        <span class="label">PM10</span>
+                        <div class="value-container">
+                            <span class="value" id="pm10">--</span>
+                            <span class="unit">µg/m³</span>
+                        </div>
+                    </div>
+                    <div class="pollutant">
+                        <span class="label">O3</span>
+                        <div class="value-container">
+                            <span class="value" id="o3">--</span>
+                            <span class="unit">µg/m³</span>
+                        </div>
+                    </div>
+                    <div class="pollutant">
+                        <span class="label">NO2</span>
+                        <div class="value-container">
+                            <span class="value" id="no2">--</span>
+                            <span class="unit">µg/m³</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="aqi-chart">
+                    <canvas id="aqiChart"></canvas>
+                </div>
+            </div>
+    
+            <!-- Traffic Status Card -->
+            <div class="card">
+                <h2>Traffic Status</h2>
+                <div class="traffic-light">
+                    <div class="light red"></div>
+                    <div class="light yellow"></div>
+                    <div class="light green"></div>
+                </div>
+                <p id="traffic-status">Checking...</p>
+            </div>
+    
+            <!-- City News Card -->
+            <div class="card">
+                <h2>Water Level News</h2>
+                <div id="news-container">
+                    <p>Loading latest news...</p>
+                </div>
+            </div>
+    
+            <!-- Energy Usage Card -->
+            <div class="card">
+                <h2>Energy Usage</h2>
+                <div class="energy-usage" id="energy-bar">
+                    <p id="energy-status">Fetching Data...</p>
+                </div>
+            </div>
+    
+        </div>
+    
+        
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        </section>
+
+        <section id="about" class="about">
+            <h2> Smart City Dashboard</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Our Smart City Dashboard is designed to transform urban management by providing a real-time, data-driven platform for monitoring and optimizing city infrastructure.
+                    </p>
+                    <p>With features like live traffic updates, weather forecasting, energy usage tracking, air quality monitoring, and smart water management, our dashboard enhances efficiency, sustainability, and citizen engagement.
+
+                    </p>
+                </div>
+                <div class="about-image">
+                    <img src="img 1.jpeg" alt="Smart City Dashboard">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="wave.png" alt="Smart City Dashboard">
+                <span>Smart City </span>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Sign Up</a></li>
+                    <li><a href="#features">Features</a></li>
+                </ul>
+            </div>
+            
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025. Smart City . All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="./scripts/dashboard.js"></script>
+    <script>
+    // Add this before the closing body tag
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Chart.js
+        const ctx = document.getElementById('aqiChart').getContext('2d');
+        const aqiChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'AQI',
+                    data: [],
+                    borderColor: '#4CAF50',
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to update AQI display
+        function updateAQI(data) {
+            const aqiValue = document.getElementById('aqiValue');
+            const aqiStatus = document.getElementById('aqiStatus');
+            const lastUpdate = document.getElementById('lastUpdate');
+            
+            // Update AQI value with animation
+            aqiValue.textContent = data.aqi;
+            aqiValue.className = 'aqi-value ' + getAQIClass(data.aqi);
+            
+            // Update status
+            aqiStatus.textContent = getAQIStatus(data.aqi);
+            aqiStatus.className = 'aqi-status ' + getAQIClass(data.aqi);
+            
+            // Update last update time
+            lastUpdate.textContent = new Date().toLocaleTimeString();
+            
+            // Update pollutant values
+            document.getElementById('pm25').textContent = data.pm25;
+            document.getElementById('pm10').textContent = data.pm10;
+            document.getElementById('o3').textContent = data.o3;
+            document.getElementById('no2').textContent = data.no2;
+            
+            // Update chart
+            updateChart(data.aqi);
+        }
+
+        // Function to get AQI class for styling
+        function getAQIClass(aqi) {
+            if (aqi <= 50) return 'good';
+            if (aqi <= 100) return 'moderate';
+            if (aqi <= 150) return 'unhealthy-sg';
+            if (aqi <= 200) return 'unhealthy';
+            return 'hazardous';
+        }
+
+        // Function to get AQI status text
+        function getAQIStatus(aqi) {
+            if (aqi <= 50) return 'Good';
+            if (aqi <= 100) return 'Moderate';
+            if (aqi <= 150) return 'Unhealthy for Sensitive Groups';
+            if (aqi <= 200) return 'Unhealthy';
+            return 'Hazardous';
+        }
+
+        // Function to update chart
+        function updateChart(aqi) {
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            
+            aqiChart.data.labels.push(time);
+            aqiChart.data.datasets[0].data.push(aqi);
+            
+            // Keep only last 10 data points
+            if (aqiChart.data.labels.length > 10) {
+                aqiChart.data.labels.shift();
+                aqiChart.data.datasets[0].data.shift();
+            }
+            
+            aqiChart.update();
+        }
+
+        // Simulate real-time updates (replace with actual API calls)
+        function simulateData() {
+            const data = {
+                aqi: Math.floor(Math.random() * 200),
+                pm25: Math.floor(Math.random() * 50),
+                pm10: Math.floor(Math.random() * 100),
+                o3: Math.floor(Math.random() * 100),
+                no2: Math.floor(Math.random() * 50)
+            };
+            updateAQI(data);
+        }
+
+        // Update every 5 seconds
+        setInterval(simulateData, 5000);
+        simulateData(); // Initial update
+    });
+    </script>
+</body>
+</html>

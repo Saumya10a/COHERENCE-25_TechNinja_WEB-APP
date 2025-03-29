@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.A.V.E Dashboard - Edit Profile</title>
+    <link rel="stylesheet" href="./styles/profile.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <img src="wave.png">
+            <span>W.A.V.E</span>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="home.html">Logout</a></li>
+                <li>
+                    <button id="theme-toggle" class="theme-btn">🌙</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="profile-container">
+            <div class="profile-header">
+                <h1>Edit Profile</h1>
+            </div>
+            
+            <div class="edit-profile-content">
+                <form id="edit-profile-form">
+                    <div class="edit-profile-image">
+                        <div id="edit-profile-img-container">
+                            <div id="edit-profile-placeholder">
+                                <span id="edit-initials"></span>
+                            </div>
+                            <img id="edit-profile-picture" src="" alt="Profile Picture" style="display: none;">
+                        </div>
+                        <div class="file-upload">
+                            <label for="profile-upload" class="btn btn-secondary">Change Photo</label>
+                            <input type="file" id="profile-upload" accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-username">Username</label>
+                        <input type="text" id="edit-username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-email">Email</label>
+                        <input type="email" id="edit-email" name="email" readonly>
+                        <small class="form-text">Email cannot be changed</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-phone">Phone Number</label>
+                        <input type="tel" id="edit-phone" name="phone" placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-city">City</label>
+                        <input type="text" id="edit-city" name="city" placeholder="Enter your city">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="profile.html" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="wave.png" >
+                <span>W.A.V.E</span>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="home.html">Logout</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: saumya.232643108@vcet.edu.in</p>
+                <p>Phone: 9167636848 </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 W.A.V.E. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="./scripts/profile.js"></script>
+</body>
+</html>

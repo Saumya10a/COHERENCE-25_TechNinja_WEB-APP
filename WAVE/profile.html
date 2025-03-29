@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Smart City Dashboard</title>
+    <link rel="stylesheet" href="./styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="home.html"><i class="fas fa-home"></i> Home</a>
+            <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="traffic.html"><i class="fas fa-route"></i> Traffic</a>
+            <a href="air_quality.html"><i class="fas fa-wind"></i> Air Quality</a>
+            <a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2><i class="fas fa-user-circle"></i> User Profile</h2>
+            </div>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userEmail">Loading...</p>
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="detail-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <span id="email">Loading...</span>
+                    </div>
+                    <div class="detail-group">
+                        <label><i class="fas fa-phone"></i> Phone</label>
+                        <span id="phone">Not provided</span>
+                    </div>
+                    <div class="detail-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Location</label>
+                        <span id="location">Not provided</span>
+                    </div>
+                    <div class="detail-group">
+                        <label><i class="fas fa-calendar-alt"></i> Member Since</label>
+                        <span id="memberSince">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button onclick="showEditProfile()" class="edit-profile">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                    <button onclick="showChangePassword()" class="change-password">
+                        <i class="fas fa-key"></i> Change Password
+                    </button>
+                    <button onclick="logout()" class="logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Profile</h3>
+            <form id="editProfileForm" onsubmit="updateProfile(event)">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" name="phone" id="editPhone">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" id="editLocation">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="save">Save Changes</button>
+                    <button type="button" onclick="closeModal('editProfileModal')" class="cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <h3>Change Password</h3>
+            <form id="changePasswordForm" onsubmit="updatePassword(event)">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" name="confirmPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="save">Change Password</button>
+                    <button type="button" onclick="closeModal('changePasswordModal')" class="cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/profile');
+                if (!response.ok) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const data = await response.json();
+                if (data.success) {
+                    updateProfileDisplay(data.user);
+                }
+            } catch (error) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Update profile display
+        function updateProfileDisplay(user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('phone').textContent = user.phone || 'Not provided';
+            document.getElementById('location').textContent = user.location || 'Not provided';
+            document.getElementById('memberSince').textContent = new Date(user.created_at).toLocaleDateString();
+            
+            // Update edit form
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editLocation').value = user.location || '';
+        }
+
+        // Function to show edit profile modal
+        function showEditProfile() {
+            document.getElementById('editProfileModal').style.display = 'flex';
+        }
+
+        // Function to show change password modal
+        function showChangePassword() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+        }
+
+        // Function to close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Function to update profile
+        async function updateProfile(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                name: formData.get('name'),
+                phone: formData.get('phone'),
+                location: formData.get('location')
+            };
+            
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Profile updated successfully', 'success');
+                    updateProfileDisplay(result.user);
+                    closeModal('editProfileModal');
+                } else {
+                    showNotification(result.message || 'Failed to update profile', 'error');
+                }
+            } catch (error) {
+                showNotification('Error updating profile', 'error');
+            }
+        }
+
+        // Function to update password
+        async function updatePassword(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            if (formData.get('newPassword') !== formData.get('confirmPassword')) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            const data = {
+                currentPassword: formData.get('currentPassword'),
+                newPassword: formData.get('newPassword')
+            };
+            
+            try {
+                const response = await fetch('/api/password', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Password updated successfully', 'success');
+                    closeModal('changePasswordModal');
+                    event.target.reset();
+                } else {
+                    showNotification(result.message || 'Failed to update password', 'error');
+                }
+            } catch (error) {
+                showNotification('Error updating password', 'error');
+            }
+        }
+
+        // Function to logout
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.href = 'login.html';
+                } else {
+                    showNotification('Error logging out', 'error');
+                }
+            } catch (error) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Function to show notifications
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Check authentication on page load
+        checkAuth();
+    </script>
+</body>
+</html> 
