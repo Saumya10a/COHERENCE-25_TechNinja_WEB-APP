@@ -30,26 +30,8 @@ function updateTrafficLight(status) {
 updateTrafficLight('green');
 
 // Energy Usage (using Chart.js)
-const ctx = document.getElementById('energyChart').getContext('2d');
-const energyChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [{
-            label: 'Energy Consumption (MWh)',
-            data: [1000, 1100, 1200, 1150, 1250, 1300],
-            borderColor: 'rgb(75, 192, 192)',
-            fill: false
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
+const energyCtx = document.getElementById('energyChart').getContext('2d');
+// Removed duplicate declaration of energyChart
 // Weather (example data)
 document.querySelector('.city').textContent = 'Los Angeles';
 document.querySelector('.time').textContent = new Date().toLocaleTimeString();
@@ -161,4 +143,11 @@ window.onload = function() {
 
     setInterval(updateTraffic, 5000); // Update Traffic Every 5 Secs
     setInterval(updateEnergyUsage, 10000); // Update Energy Every 10 Secs
+}
+
+// Toggle Chatbot Overlay
+function toggleChatbot() {
+    const chatbotOverlay = document.getElementById('chatbotOverlay');
+    chatbotOverlay.style.display =
+        chatbotOverlay.style.display === 'flex' ? 'none' : 'flex';
 };
